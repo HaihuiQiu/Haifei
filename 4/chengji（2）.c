@@ -155,6 +155,8 @@ void Print(struct Student* pHead)
             p=p->pNext;
         }
     }
+	
+	
     abc(pHead);*/
     void show2()
     {
