@@ -12,7 +12,9 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
- 
+
+u8 I2C1_ADDRESS = 0XBC;
+
 //初始化IIC
 void IIC_Init(void)
 {					     
@@ -30,9 +32,9 @@ void IIC_Init(void)
 	
 	I2C_DeInit(I2C1);
 
-    I2C_InitStructure.I2C_Mode = I2C_Mode_SMBusDevice;//从模式
+    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;//从模式
     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
-    I2C_InitStructure.I2C_OwnAddress1 = 0XBC;//这个就是作为从机的地址，一定要配置正确
+    I2C_InitStructure.I2C_OwnAddress1 = I2C1_ADDRESS;//这个就是作为从机的地址，一定要配置正确0XBC
     I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
     I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;//7位的地址
     I2C_InitStructure.I2C_ClockSpeed = 100000;

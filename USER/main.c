@@ -26,13 +26,11 @@ int main(void)
 		
    Hcsr04Init();    
    printf("超声波初始化成功!\n");
-	Gui_DrawFont_GBK16(0,80,BLACK,GRAY0, "NRF24L01 Error");
+	Gui_DrawFont_GBK16(0,80,BLACK,GRAY0, "LCD test");
    while(1) 
 	{	 
-		 //length = Hcsr04GetLength();
+		length = Hcsr04GetLength();
 		 
-		//length=Single_Read(0XBC,0);
-		//Single_Write(0XBC,0,length) ;
 		printf("距离为:%.3fcm\n",length);
 		unsigned char tmp[5];
 		//sprintf(tmp,"%1.lf",length);

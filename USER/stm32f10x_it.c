@@ -25,8 +25,17 @@
 #include "stm32f10x_it.h" 
 #include "stm32f10x_i2c.h"
 #include "myiic.h" 
-extern u8 length;
- 
+#include "stdio.h" 
+
+
+extern float length;
+extern u8 I2C1_ADDRESS;
+vu32 Tx_Counter =0;
+vu32 Rx_Counter = 0;
+vu32 show_counter1 = 0;
+vu32 show_counter2 = 0;	
+
+
 void NMI_Handler(void)
 {
 }
@@ -91,54 +100,41 @@ void SysTick_Handler(void)
 
 void I2C1_EV_IRQHandler(void)
 {
-
-
-	__IO uint16_t SR1Register =0;
-  __IO uint16_t SR2Register =0;
-
-  SR1Register = I2C1->SR1;                       //读取状态
-  SR2Register = I2C1->SR2;
-
-//  /* I2C1是从机(MSL = 0) */
-  if((SR2Register & 0x0001) != 0x0001)
-  {
-		//ADDR
-		if((SR1Register & 0x0002) == 0x0002)
-    {
-      /* 清除标志，准备接收数据 */
-      SR1Register = 0;
-      SR2Register = 0;
-			length= 0;	
-
-    }
-
-		//TxE
-		if((SR1Register & 0x0080) == 0x0080)
+	show_counter2++;
+	if(show_counter2>100000)
+	{
+		show_counter2=0;
+		printf("\r\n The I2C1 LastEvent is %x \r\n" , I2C_GetLastEvent(I2C1));
+	}
+	switch(I2C_GetLastEvent(I2C1))
+	{
+		case I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED: //收到匹配的地址数据
 		{
-			 SR1Register = 0;
-      SR2Register = 0;
-			I2C1->DR =length;
-
+			printf("\r\n The I2C1 is ready \r\n");
+			I2C_GenerateSTOP(I2C1, DISABLE);
+			break;
 		}
-
-		//STOPF
-		if((SR1Register & 0x0010) == 0x0010)
+		case I2C_EVENT_SLAVE_BYTE_TRANSMITTING:  //发送数据
 		{
-			I2C1->CR1 |= CR1_PE_Set;
-      SR1Register = 0;
-      SR2Register = 0;
-			length= 5;	
-
+			printf("\r\n The I2C1 transmits is transmitting \r\n");
+			I2C_SendData(I2C1, length);  //总共调用了4次
+			break;
 		}
-		
-		//TIME_OUT
-		if((SR1Register & 0x4000) == 0x4000)
+		//发送数据，要发送，不然锁死，不过master没收到，不知道干嘛的
+		case I2C_EVENT_SLAVE_BYTE_TRANSMITTED:
 		{
-			I2C1->CR1 |= CR1_PE_Set;
-			 SR1Register = 0;
-      SR2Register = 0;
-
+			printf("\r\n The I2C1 transmits one byte \r\n");
+			I2C_SendData(I2C1, length);
+			break;
 		}
+		case I2C_EVENT_SLAVE_STOP_DETECTED:  //收到结束条件
+		{
+			printf("\r\n The I2C1 is finish \r\n");
+			I2C_ClearFlag(I2C1,I2C_FLAG_STOPF);
+			I2C_GenerateSTOP(I2C1, ENABLE);
+			break;
+		}
+		default: break;
 	}
 }
 
