@@ -100,6 +100,7 @@ void SysTick_Handler(void)
 
 void I2C1_EV_IRQHandler(void)
 {
+	printf("\r\n 进入了 I2C1 中断 \r\n");
 	show_counter2++;
 	if(show_counter2>100000)
 	{
@@ -108,32 +109,36 @@ void I2C1_EV_IRQHandler(void)
 	}
 	switch(I2C_GetLastEvent(I2C1))
 	{
-		case I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED: //收到匹配的地址数据
+		case I2C_EVENT_SLAVE_TRANSMITTER_ADDRESS_MATCHED: //收到匹配的地址数据  EV1
 		{
 			printf("\r\n The I2C1 is ready \r\n");
 			I2C_GenerateSTOP(I2C1, DISABLE);
 			break;
 		}
-		case I2C_EVENT_SLAVE_BYTE_TRANSMITTING:  //发送数据
+		case I2C_EVENT_SLAVE_BYTE_TRANSMITTING:  //发送数据  EV3
 		{
 			printf("\r\n The I2C1 transmits is transmitting \r\n");
 			I2C_SendData(I2C1, length);  //总共调用了4次
 			break;
 		}
 		//发送数据，要发送，不然锁死，不过master没收到，不知道干嘛的
-		case I2C_EVENT_SLAVE_BYTE_TRANSMITTED:
+		case I2C_EVENT_SLAVE_BYTE_TRANSMITTED:    //EV3
 		{
 			printf("\r\n The I2C1 transmits one byte \r\n");
 			I2C_SendData(I2C1, length);
 			break;
 		}
-		case I2C_EVENT_SLAVE_STOP_DETECTED:  //收到结束条件
+		case I2C_EVENT_SLAVE_STOP_DETECTED:  //收到结束条件   EV4
 		{
 			printf("\r\n The I2C1 is finish \r\n");
 			I2C_ClearFlag(I2C1,I2C_FLAG_STOPF);
 			I2C_GenerateSTOP(I2C1, ENABLE);
 			break;
 		}
+        case I2C_EVENT_SLAVE_ACK_FAILURE://End of transmission EV3_2
+              //TODO: Doesn't seem to be getting reached, so just check at top-level
+             I2C_ClearITPendingBit(I2C1, I2C_IT_AF);
+             break;
 		default: break;
 	}
 }

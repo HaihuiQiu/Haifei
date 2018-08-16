@@ -17,10 +17,10 @@
 #define LCD_LED        	GPIO_Pin_12  //PB9--->>TFT --BL
 #define LCD_CS        	GPIO_Pin_13  //PB11--->>TFT --CS/CE
 
-#define LCD_RS         	GPIO_Pin_0	//PB0--->>TFT --RS/DC
-#define LCD_RST     	GPIO_Pin_1	//PB1--->>TFT --RST
-#define LCD_SDA        	GPIO_Pin_10	//PB10 MOSI--->>TFT --SDA/DIN
-#define LCD_SCL        	GPIO_Pin_11	//PB11--->>TFT --SCL/SCK
+#define LCD_RS         	GPIO_Pin_6	//PB0--->>TFT --RS/DC
+#define LCD_RST     	GPIO_Pin_7	//PB1--->>TFT --RST
+#define LCD_SDA        	GPIO_Pin_8	//PB10 MOSI--->>TFT --SDA/DIN
+#define LCD_SCL        	GPIO_Pin_9	//PB11--->>TFT --SCL/SCK
 
 //#define LCD_CS_SET(x) LCD_CTRL->ODR=(LCD_CTRL->ODR&~LCD_CS)|(x ? LCD_CS:0)
 
