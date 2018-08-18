@@ -11,7 +11,7 @@
 #include "GUI.h"
 #include "Lcd_Driver.h"
 #include "QDTFT_demo.h"
-float length;
+float length=0;
 //²âÊÔÖ÷º¯Êı
 int main(void)
 {	 

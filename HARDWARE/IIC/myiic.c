@@ -26,7 +26,6 @@ void IIC_Init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD ;   //开漏输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOB,GPIO_Pin_6|GPIO_Pin_7); 	//PB6,PB7 输出高
 	
 	//i2c从机的配置
 	I2C_InitTypeDef I2C_InitStructure;
@@ -35,7 +34,7 @@ void IIC_Init(void)
 
     I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;//从模式
     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
-    I2C_InitStructure.I2C_OwnAddress1 = I2C1_ADDRESS;//这个就是作为从机的地址，一定要配置正确0XBC
+    I2C_InitStructure.I2C_OwnAddress1 = I2C1_ADDRESS;//这个就是作为从机的地址，一定要配置正确0X3C
     I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
     I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;//7位的地址
     I2C_InitStructure.I2C_ClockSpeed = 100000;
