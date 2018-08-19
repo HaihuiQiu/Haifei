@@ -11,8 +11,8 @@ void hcsr04_NVIC(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
 	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;             
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级0级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;    //从优先级0级     
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //先占优先级0级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;    //从优先级0级     
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;     //IRQ通道被使能  
 	NVIC_Init(&NVIC_InitStructure);//初始化NVIC寄存器
 }
